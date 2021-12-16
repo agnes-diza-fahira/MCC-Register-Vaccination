@@ -21,9 +21,9 @@ namespace UserAuthGroup
             this.firstname      = firstname;
             this.lastname       = lastname;
             this.username       = username;
-            this.password       = password;
+            this.password       = BCrypt.Net.BCrypt.HashPassword(password);
             this.role           = role;
-            this.favorite  = favorite;
+            this.favorite       = favorite;
         }
 
         public User(string firstname, string lastname, List<User> users)
@@ -143,7 +143,7 @@ namespace UserAuthGroup
             for (int i = 0; i < users.Count; i++)
             {
                 User user = users[i];
-                if (user.username == username && user.password == password)
+                if (user.username == username && BCrypt.Net.BCrypt.Verify(user.password, this.password))
                 {
                     return true;
                 }
