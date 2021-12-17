@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace UserAuthGroup
 {
@@ -26,6 +27,7 @@ namespace UserAuthGroup
 			int status = 0;
 
 			List<User> users = new List<User>();
+			IntiateUser(users);
 
 			do
 			{
@@ -36,7 +38,7 @@ namespace UserAuthGroup
 					switch (select)
 					{
 						case 1:
-							Console.WriteLine(1);
+							ViewLogin(users);
 							break;
 						case 2:
 							ViewRegistration(users);
@@ -66,7 +68,15 @@ namespace UserAuthGroup
 			} while (status == 0);
 		}
 
-		private static void ViewRegistration(List<User> users)
+        private static void IntiateUser(List<User> users)
+        {
+			users.Add(new User(10001, "Agnes", "Fahira", "AgFa", "123456", "Admin", "Fish"));
+			users.Add(new User(10002, "Muhammad", "Candra", "MuCa", "123456", "Admin", "Cat"));
+			users.Add(new User(10003, "Abdul", "Jabar", "AbJa", "123456", "Admin", "Bird"));
+			users.Add(new User(10004, "Sofia", "Nadia", "SoNa", "123456", "user", "Bird"));
+        }
+
+        private static void ViewRegistration(List<User> users)
 		{
 			string firstname,
 			lastname,
@@ -156,7 +166,7 @@ namespace UserAuthGroup
 			{
 				Console.Clear();
 				Console.WriteLine("\t------------------------------\n");
-				Console.WriteLine("\t          Create User         \n");
+				Console.WriteLine("\t          List User         \n");
 				Console.WriteLine("\t------------------------------\n");
 				if (listUser.Count == 0)
 				{
@@ -275,7 +285,6 @@ namespace UserAuthGroup
 			int status = 0;
 			do
 			{
-
 				Console.Clear();
 				Console.WriteLine("\t======================\n");
 				Console.WriteLine("\t      Login User      \n");
@@ -289,9 +298,9 @@ namespace UserAuthGroup
 				User user = new User(username, password);
 
 				if (user.CheckUser(users))
-				{
-					MessageNotification(true, "Successfully login");
-				}
+                {
+                    SuccessLoginView(users, user);
+                }
 				else
 				{
 					MessageNotification(false, "Username or Password Wrong");
@@ -309,7 +318,89 @@ namespace UserAuthGroup
 			} while (status == 0);
 		}
 
-		private static void MessageNotification(bool status, string message)
+        private static void SuccessLoginView(List<User> users, User user)
+        {
+			List<string> usernameList = users.Select(ur => ur.username).ToList();
+			int id = usernameList.IndexOf(user.username);
+			string role = users[id].role;
+
+			int status = 0;
+			do
+			{
+				MessageNotification(true, "Successfully login");
+				Console.WriteLine("Enter to the next page");
+				ConsoleKeyInfo keyInfo;
+				while (true)
+				{
+					keyInfo = Console.ReadKey(true);
+					if (keyInfo.Key == ConsoleKey.Enter)
+					{
+						status = 1;
+
+					}
+					break;
+				}
+
+				if (role == "user")
+				{
+					UserView(users, user, id);
+				}
+				else
+				{
+					AdminView(users, user, id);
+				}
+
+
+			} while (status == 0);
+        }
+
+        private static void UserView(List<User> users, User user, int id)
+        {
+			int status = 0;
+			do
+			{
+				Console.Clear();
+				Console.WriteLine("\t======================\n");
+				Console.WriteLine($"\t   Wellcome {users[id].firstname}\n");
+				Console.WriteLine("\t======================\n");
+				Console.WriteLine("\t1. Register Vaccination");
+				Console.WriteLine("\t2. About Me			");
+				Console.WriteLine("\t3. Logout				");
+				ConsoleKeyInfo keyInfo;
+				while (true)
+				{
+					keyInfo = Console.ReadKey(true);
+					if (keyInfo.Key == ConsoleKey.Enter) status = 1;
+					break;
+				}
+			} while (status == 0);
+		}
+
+        private static void AdminView(List<User> users, User user, int id)
+        {
+			int status = 0;
+			do
+			{
+				Console.Clear();
+				Console.WriteLine("\t======================\n");
+				Console.WriteLine($"\t   You're Admin      \n");
+				Console.WriteLine("\t======================\n");
+				Console.WriteLine("\t1. Manage Vaccination");
+				Console.WriteLine("\t2. Manage User		  ");
+				Console.WriteLine("\t3. Logout			  ");
+
+				ConsoleKeyInfo keyInfo;
+				while (true)
+				{
+					keyInfo = Console.ReadKey(true);
+					if (keyInfo.Key == ConsoleKey.Enter) status = 1;
+					break;
+				}
+
+			} while (status == 0);
+		}
+
+        private static void MessageNotification(bool status, string message)
 		{
 
 			if (status)

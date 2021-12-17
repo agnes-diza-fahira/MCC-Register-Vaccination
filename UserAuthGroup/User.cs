@@ -150,7 +150,5 @@ namespace UserAuthGroup
             }
             return false;
         }
-
-
     }
 }
