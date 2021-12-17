@@ -334,7 +334,6 @@ namespace UserAuthGroup
 			Console.ForegroundColor = ConsoleColor.White;
 			Console.Write("Enter to insert again or Esc to menu");
 		}
-		
 		private static void DeleteUser(List<User> listUser, string userName, string password)
 		{
 			int exitDA = 0;
@@ -362,5 +361,6 @@ namespace UserAuthGroup
 					}
 				}
 			} while (exitDA == 0);
+		}
 	}
 }
