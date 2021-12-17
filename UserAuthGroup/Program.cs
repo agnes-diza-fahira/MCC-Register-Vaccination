@@ -361,7 +361,6 @@ namespace UserAuthGroup
 					}
 				}
 			} while (exitDA == 0);
-
 		}
 	}
 }
