@@ -334,7 +334,33 @@ namespace UserAuthGroup
 			Console.ForegroundColor = ConsoleColor.White;
 			Console.Write("Enter to insert again or Esc to menu");
 		}
+		private static void DeleteUser(List<User> listUser, string userName, string password)
+		{
+			int exitDA = 0;
+			do
+			{
+				Console.Clear();
+				Console.WriteLine("=========================");
+				Console.WriteLine("Remove Account      ");
+				Console.WriteLine("=========================");
 
+				bool exist = listUser.Exists(item => item.username == userName);
+				bool passTrue = listUser.Exists(item => item.password == password);
+				Console.WriteLine("Are You Sure to Delete This Account? [Y/N] :");
+
+				if (exist & Console.ReadKey().Key == ConsoleKey.Y)
+				{
+					Console.Write("Password:    ");
+					string inputPassword = Convert.ToString(Console.ReadLine());
+					if (passTrue)
+					{
+						listUser.RemoveAll(item => item.username == userName);
+						Console.WriteLine("\n Remove Success");
+						Console.ReadKey();
+						exitDA = 1;
+					}
+				}
+			} while (exitDA == 0);
 
 		}
 	}
