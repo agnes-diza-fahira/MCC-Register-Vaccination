@@ -334,5 +334,21 @@ namespace UserAuthGroup
 			Console.ForegroundColor = ConsoleColor.White;
 			Console.Write("Enter to insert again or Esc to menu");
 		}
-	}
+
+		private static void EditUser(List<User> listUser, int key)
+        {
+            Console.WriteLine("Edit Profile\n");
+            Console.Write("First name \t: ");
+            String editFirstName = Console.ReadLine();
+			listUser[key].firstname = editFirstName;
+
+            Console.Write("Last name \t: ");
+            String editLastName = Console.ReadLine();
+            listUser[key].firstname = editFirstName;
+
+            Console.Write("Password \t: ");
+            String editPassword = Console.ReadLine();
+			listUser[key].password = BCrypt.Net.BCrypt.HashPassword(editFirstName);
+        }
+    }
 }
