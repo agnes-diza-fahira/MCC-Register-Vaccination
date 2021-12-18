@@ -5,6 +5,38 @@ namespace UserAuthGroup
 {
 	public class Program
 	{
+		public static void Main(string[] args)
+		{
+
+			String select;
+			int status = 0;
+
+			List<User> users = new List<User>();
+
+            do
+            {
+				ViewMainMenu();
+				select = Console.ReadLine();
+				switch (select)
+				{
+					case "1":
+						Console.WriteLine(1);
+						break;
+					case "2":
+						ViewRegistration(users);
+						break;
+					case "3":
+						Console.WriteLine(3);
+						break;
+					case "4":
+						ConfirmExit();
+						break;
+					default:
+						break;
+				}
+            } while (status == 0);
+
+		}
 
 		private static void ViewMainMenu()
 		{
@@ -19,51 +51,27 @@ namespace UserAuthGroup
 			Console.Write("\tPlease Input a Number : ");
 		}
 
-		public static void Main(string[] args)
+		private static void ConfirmExit()
 		{
-
-			int select;
-			int status = 0;
-
-			List<User> users = new List<User>();
-
-			do
+			Console.Write("\nAre u sure want to exit (Y/n) ? ");
+			String confirm = Console.ReadLine();
+			switch (confirm.ToLower())
 			{
-				try
-				{
-					ViewMainMenu();
-					select = Convert.ToInt32(Console.ReadLine());
-					switch (select)
-					{
-						case 1:
-							Console.WriteLine(1);
-							break;
-						case 2:
-							ViewRegistration(users);
-							break;
-						case 3:
-							Console.WriteLine(3);
-							break;
-						case 4:
-							Console.WriteLine(4);
-							break;
-						default:
-							break;
-					}
-				}
-				catch (Exception)
-				{
-					ExecptionMessage();
-				}
-				ConsoleKeyInfo KeySelect;
-				while (true)
-				{
-					KeySelect = Console.ReadKey(true);
-					if (KeySelect.Key == ConsoleKey.Enter) status = 0;
-					if (KeySelect.Key == ConsoleKey.Escape) status = 1;
+				case "y":
+					Console.Clear();
+					Environment.Exit(0);
 					break;
-				}
-			} while (status == 0);
+				case "":
+					Console.Clear();
+					Environment.Exit(0);
+					break;
+				case "n":
+					ViewMainMenu();
+					break;
+				default:
+					ConfirmExit();
+					break;
+			}
 		}
 
 		private static void ViewRegistration(List<User> users)
