@@ -1,362 +1,446 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace UserAuthGroup
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
+    public class Program
+    {
+        // Function yang menampilkan First View dengan pilihan : login, registration, dan forgot password.
+        private static void GuestView()
+        {
+            Console.Clear();
+            Console.WriteLine("\t------------------------------\n");
+            Console.WriteLine("\t         Medical House        \n");
+            Console.WriteLine("\t------------------------------\n");
+            Console.WriteLine("\t1. Login\t");
+            Console.WriteLine("\t2. Registration\t");
+            Console.WriteLine("\t3. Forgot Password?\t");
+            Console.WriteLine("\t4. Exit\n");
+            Console.Write("\tPlease Input a Number : ");
+        }
 
-			String select;
-			int status = 0;
+        public static void Main(string[] args)
+        {
 
-			List<User> users = new List<User>();
+            int select;
+            int status = 0;
+
+            List<User> users = new List<User>() { new User() { Id = 10001, FirstName = "Candra", LastName = "Irawan", UserName = "candra.irawan1", Password = "$2b$10$8tzD9anTWecp9EtPdg2uMu3Q9GU7GvokUIT1JFw2ToW/bJ1NRGEWy", Role = "Admin", Favorite = "Kuda" } };
 
             do
             {
-				ViewMainMenu();
-				select = Console.ReadLine();
-				switch (select)
-				{
-					case "1":
-						Console.WriteLine(1);
-						break;
-					case "2":
-						ViewRegistration(users);
-						break;
-					case "3":
-						Console.WriteLine(3);
-						break;
-					case "4":
-						ConfirmExit();
-						break;
-					default:
-						break;
-				}
+                try
+                {
+
+                    GuestView();
+                    select = Convert.ToInt32(Console.ReadLine());
+                    switch (select)
+                    {
+                        case 1:
+                            LoginView(users);
+                            break;
+                        case 2:
+                            RegistrationView(users);
+                            break;
+                        case 3:
+                            ForgotPasswordView(users);
+                            break;
+                        case 4:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                catch (Exception)
+                {
+                    // Menampikan informasi error terkait validasi data yang diinputkan oleh user.
+                    ExecptionView();
+                }
+                ConsoleKeyInfo KeySelect;
+                while (true)
+                {
+                    KeySelect = Console.ReadKey(true);
+
+                    // Enter untuk kembali ke Guest View.
+                    if (KeySelect.Key == ConsoleKey.Enter) status = 0;
+
+                    // Esc untuk keluar.
+                    if (KeySelect.Key == ConsoleKey.Escape) status = 1;
+                    break;
+                }
+            } while (status == 0);
+        }
+
+        // Function yang menampilkan Login View dengan user diminta mengisi username dan password
+        private static void LoginView(List<User> users)
+        {
+            string username,
+            password;
+            int status = 0;
+            do
+            {
+
+                Console.Clear();
+                Console.WriteLine("\t------------------------------\n");
+                Console.WriteLine("\t         Login User         \n");
+                Console.WriteLine("\t------------------------------\n");
+                Console.WriteLine("\tPlease Input Your Data\n");
+
+                Console.Write("\tUsername   : ");
+                username = Console.ReadLine();
+
+                Console.Write("\tPassword   : ");
+                password = Console.ReadLine();
+
+                // Membuat object baru dengan mengisi parameter dari username dan password.
+                User user = new User(username, password);
+
+                LoadingView();
+
+                // Memanggil function AuthenticationUser untuk melakukan verifikasi data sudah sesuai atau belum dengan data dilist Users.
+                if (user.AuthenticationUser(users) == user.AdminRole())
+                {
+                    // User dengan role Admin.
+                    MessageView(true, "Successfully login");
+                    AdminView();
+
+                }
+                else if (user.AuthenticationUser(users) == user.UserRole())
+                {
+                    // User dengan role User.
+                    MessageView(true, "Successfully login");
+                    UserView();
+                }
+                else
+                {
+                    // Username atau Password salah.
+                    MessageView(false, "Username or Password Wrong");
+                }
+
+                Console.WriteLine("\tEnter to return to the main menu");
+
+                ConsoleKeyInfo keyInfo;
+                while (true)
+                {
+                    keyInfo = Console.ReadKey(true);
+                    if (keyInfo.Key == ConsoleKey.Enter) status = 1;
+                    break;
+                }
+            } while (status == 0);
+        }
+
+        // Function yang menampilkan Two View untuk User dengan pilihan : registration vaccination, about me dan logout.
+        private static void UserView()
+        {
+            int select;
+            int status = 0;
+            do
+            {
+                try
+                {
+                    Console.Clear();
+                    Console.WriteLine("\t------------------------------\n");
+                    Console.WriteLine("\t         Medical House        \n");
+                    Console.WriteLine("\t------------------------------\n");
+                    Console.WriteLine("\t1. Registration Vaccination\t");
+                    Console.WriteLine("\t2. About Me\t");
+                    Console.WriteLine("\t3. Logout\n");
+                    Console.Write("\tPlease Input a Number : ");
+                    select = Convert.ToInt32(Console.ReadLine());
+                    switch (select)
+                    {
+                        case 1:
+                            Console.WriteLine("Registration Vaccination");
+                            break;
+                        case 2:
+                            Console.WriteLine("About Me");
+                            break;
+                        case 3:
+                            GuestView();
+                            break;
+                        case 4:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                catch (Exception)
+                {
+                    ExecptionView();
+                }
+
+                ConsoleKeyInfo KeySelect;
+                while (true)
+                {
+                    KeySelect = Console.ReadKey(true);
+
+                    // Enter untuk kembali ke User View.
+                    if (KeySelect.Key == ConsoleKey.Enter) status = 0;
+                    break;
+                }
             } while (status == 0);
 
-		}
+        }
 
-		private static void ViewMainMenu()
-		{
-			Console.Clear();
-			Console.WriteLine("\t------------------------------\n");
-			Console.WriteLine("\t         Medical House        \n");
-			Console.WriteLine("\t------------------------------\n");
-			Console.WriteLine("\t1. Login\t");
-			Console.WriteLine("\t2. Registration\t");
-			Console.WriteLine("\t3. Forgot Password?\t");
-			Console.WriteLine("\t4. Exit\n");
-			Console.Write("\tPlease Input a Number : ");
-		}
-
-		private static void ConfirmExit()
-		{
-			Console.Write("\nAre u sure want to exit (Y/n) ? ");
-			String confirm = Console.ReadLine();
-			switch (confirm.ToLower())
-			{
-				case "y":
-					Console.Clear();
-					Environment.Exit(0);
-					break;
-				case "":
-					Console.Clear();
-					Environment.Exit(0);
-					break;
-				case "n":
-					ViewMainMenu();
-					break;
-				default:
-					ConfirmExit();
-					break;
-			}
-		}
-
-		private static void ViewRegistration(List<User> users)
-		{
-			string firstname,
-			lastname,
-			username,
-			password,
-			role,
-			favorite;
-			int id;
-			int status = 0;
-
-			do
-			{
-				try
-				{
-					Console.Clear();
-					Console.WriteLine("\t------------------------------\n");
-					Console.WriteLine("\t         Registration         \n");
-					Console.WriteLine("\t------------------------------\n");
-
-					Console.Write("\tFirst Name       : ");
-					firstname = Convert.ToString(Console.ReadLine());
-
-					Console.Write("\tLast Name        : ");
-					lastname = Convert.ToString(Console.ReadLine());
-
-					Console.Write("\tPassword         : ");
-					password = Convert.ToString(Console.ReadLine());
-
-					Console.Write("\tFavorit Animal   : ");
-					favorite = Convert.ToString(Console.ReadLine());
-
-					Console.WriteLine();
-
-					User user = new User();
-
-					id = user.GenerateID(users);
-
-					firstname = user.GenerateCapitalize(firstname);
-
-					username = user.GenerateUsername(firstname, lastname, users);
-
-					lastname = user.GenerateCapitalize(lastname);
-
-					password = user.GeneratePassword(password);
-
-					role = user.GenerateRoleUser();
-
-					favorite = user.GenerateCapitalize(favorite);
-
-					users.Add(new User(id, firstname, lastname, username, password, role, favorite));
-                    
-					Console.Clear();
-					Console.WriteLine("\t-----------------------------------------\n");
-
-					Console.ForegroundColor = ConsoleColor.Green;
-					Console.WriteLine("\t	Successful Registration     \n");
-					Console.ForegroundColor = ConsoleColor.White;
-
-					Console.WriteLine("\t-----------------------------------------\n");
-					Console.WriteLine($"\tUsername        : {username} ");
-                    Console.WriteLine("");
-
-					Console.Write("\tEnter to insert again or Esc to menu");
-
-				}
-				catch (Exception)
-				{
-					ExecptionMessage();
-				}
-				ConsoleKeyInfo KeySelect;
-				while (true)
-				{
-					KeySelect = Console.ReadKey(true);
-					if (KeySelect.Key == ConsoleKey.Enter) status = 0;
-					if (KeySelect.Key == ConsoleKey.Escape) status = 1;
-					ViewMainMenu();
-					break;
-				}
-			} while (status == 0);
-		}
-
-
-		private static void ViewUser(List<User> listUser)
-		{
-			int status = 0;
-			do
-			{
-				Console.Clear();
-				Console.WriteLine("\t------------------------------\n");
-				Console.WriteLine("\t          Create User         \n");
-				Console.WriteLine("\t------------------------------\n");
-				if (listUser.Count == 0)
-				{
-					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine("\t           No User            \n");
-					Console.ForegroundColor = ConsoleColor.White;
-					Console.WriteLine("\tBe the first user,\n");
-					Console.WriteLine("\tPress enter to back to the main menu and create your own account!\t");
-				}
-				else
-				{
-					for (int i = 0; i < listUser.Count; i++)
-					{
-						Console.WriteLine("");
-						Console.WriteLine($"\tId            : {listUser[i].id}");
-						Console.WriteLine($"\tFirst Name    : {listUser[i].firstname}");
-						Console.WriteLine($"\tLast Name     : {listUser[i].lastname}");
-						Console.WriteLine($"\tUsername      : {listUser[i].username}");
-						Console.WriteLine("");
-						Console.WriteLine("\t------------------------------\n");
-
-					}
-					Console.WriteLine("");
-					Console.WriteLine("\tPress enter to back to the main menu\t");
-				}
-
-				ConsoleKeyInfo keyInfo;
-				while (true)
-				{
-					keyInfo = Console.ReadKey(true);
-					if (keyInfo.Key == ConsoleKey.Enter) status = 1;
-					break;
-				}
-
-			} while (status == 0);
-		}
-
-		private static void ViewSearch(List<User> listUser)
-		{
-			Console.Clear();
-			Console.WriteLine("\t------------------------------\n");
-			Console.WriteLine("\t            Search            \n");
-			Console.WriteLine("\t------------------------------\n");
-			Console.WriteLine("\tOption: \t");
-			Console.WriteLine("\t1. by id\t");
-			Console.WriteLine("\t2. by firstname\t");
-			Console.WriteLine("\t3. by lastname\t");
-			Console.WriteLine("\t4. by username\n");
-			Console.Write("\tSearch by: \t");
-			String searchOption = Console.ReadLine();
-			switch (searchOption)
-			{
-				case "1":
-					SearchUser(listUser, "id");
-					break;
-				case "2":
-					SearchUser(listUser, "firstname");
-					break;
-				case "3":
-					SearchUser(listUser, "lastname");
-					break;
-				case "4":
-					SearchUser(listUser, "username");
-					break;
-				default:
-					break;
-			}
-		}
-
-		private static void SearchUser(List<User> listUser, string key)
-		{
-			int status = 0;
-			int input;
-			string setence;
-			do
-			{
-				try
-				{
-					Console.Clear();
-					Console.WriteLine("\t------------------------------\n");
-					Console.WriteLine($"\t          Search {key}            \n");
-					Console.WriteLine("\t------------------------------\n");
-					Console.Write($"\tEnter user {key}: \t");
-					User user = new User();
-					if (key == "id")
-					{
-						input = Convert.ToInt32(Console.ReadLine());
-						user.ResultSearch(listUser, key, input);
-					}
-					else
-					{
-						setence = Convert.ToString(Console.ReadLine());
-						user.ResultSearch(listUser, key, setence);
-					}
-
-				}
-				catch (Exception)
-				{
-					Console.WriteLine("\tSomething wrong");
-				}
-
-				ConsoleKeyInfo keyInfo;
-				while (true)
-				{
-					keyInfo = Console.ReadKey(true);
-					if (keyInfo.Key == ConsoleKey.Enter) status = 1;
-					break;
-				}
-			} while (status == 0);
-		}
-
-		private static void ViewLogin(List<User> users)
-		{
-			string username,
-			password;
-			int status = 0;
-			do
-			{
-
-				Console.Clear();
-				Console.WriteLine("\t======================\n");
-				Console.WriteLine("\t      Login User      \n");
-				Console.WriteLine("\t======================\n");
-				Console.WriteLine("\tPlease Input Your Data\n");
-				Console.Write("\tUsername   : ");
-				username = Console.ReadLine();
-				Console.Write("\tPassword   : ");
-				password = Console.ReadLine();
-
-				User user = new User(username, password);
-
-				if (user.CheckUser(users))
-				{
-					MessageNotification(true, "Successfully login");
-				}
-				else
-				{
-					MessageNotification(false, "Username or Password Wrong");
-				}
-
-				Console.WriteLine("Enter to return to the main menu");
-
-				ConsoleKeyInfo keyInfo;
-				while (true)
-				{
-					keyInfo = Console.ReadKey(true);
-					if (keyInfo.Key == ConsoleKey.Enter) status = 1;
-					break;
-				}
-			} while (status == 0);
-		}
-
-		private static void MessageNotification(bool status, string message)
-		{
-
-			if (status)
-			{
-				Console.ForegroundColor = ConsoleColor.Green;
-				Console.WriteLine($"\t         {message}          \t");
-				Console.ForegroundColor = ConsoleColor.White;
-			}
-			else
-			{
-				Console.ForegroundColor = ConsoleColor.Red;
-				Console.WriteLine($"\t         {message}          \t");
-				Console.ForegroundColor = ConsoleColor.White;
-			}
-		}
-
-		private static void ExecptionMessage()
-		{
-			Console.WriteLine("");
-			Console.ForegroundColor = ConsoleColor.Red;
-			Console.Write("\tPlease match the requested, ");
-			Console.ForegroundColor = ConsoleColor.White;
-			Console.Write("Enter to insert again or Esc to menu");
-		}
-
-		private static void EditUser(List<User> listUser, int key)
+        // Function yang menampilkan Two View untuk Admin dengan pilihan : manage vaccination, manage user,dan logout.
+        private static void AdminView()
         {
-            Console.WriteLine("Edit Profile\n");
-            Console.Write("First name \t: ");
-            String editFirstName = Console.ReadLine();
-			listUser[key].firstname = editFirstName;
+            int select;
+            int status = 0;
+            do
+            {
+                try
+                {
+                    Console.Clear();
+                    Console.WriteLine("\t------------------------------\n");
+                    Console.WriteLine("\t         Medical House        \n");
+                    Console.WriteLine("\t------------------------------\n");
+                    Console.WriteLine("\t1. Manage Vaccination\t");
+                    Console.WriteLine("\t2. Manage User\t");
+                    Console.WriteLine("\t3. Logout\n");
+                    Console.Write("\tPlease Input a Number : ");
+                    select = Convert.ToInt32(Console.ReadLine());
+                    switch (select)
+                    {
+                        case 1:
+                            Console.WriteLine("Manage Vaccination");
+                            break;
+                        case 2:
+                            Console.WriteLine("Manage User");
+                            break;
+                        case 3:
+                            GuestView();
+                            break;
+                        case 4:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                catch (Exception)
+                {
+                    ExecptionView();
+                }
 
-            Console.Write("Last name \t: ");
-            String editLastName = Console.ReadLine();
-            listUser[key].firstname = editFirstName;
+                ConsoleKeyInfo KeySelect;
+                while (true)
+                {
+                    KeySelect = Console.ReadKey(true);
 
-            Console.Write("Password \t: ");
-            String editPassword = Console.ReadLine();
-			listUser[key].password = BCrypt.Net.BCrypt.HashPassword(editFirstName);
+                    // Enter untuk kembali ke Admin View.
+                    if (KeySelect.Key == ConsoleKey.Enter) status = 0;
+                    break;
+                }
+            } while (status == 0);
+        }
+
+        // Function yang menampilkan Registration View dengan user diminta melengkapi data.
+        private static void RegistrationView(List<User> users)
+        {
+            string firstname,
+            lastname,
+            username,
+            password,
+            role,
+            favorite;
+            int id;
+            int status = 0;
+
+            do
+            {
+                try
+                {
+                    Console.Clear();
+                    Console.WriteLine("\t------------------------------\n");
+                    Console.WriteLine("\t         Registration         \n");
+                    Console.WriteLine("\t------------------------------\n");
+
+                    Console.Write("\tFirst Name       : ");
+                    firstname = Convert.ToString(Console.ReadLine());
+
+                    Console.Write("\tLast Name        : ");
+                    lastname = Convert.ToString(Console.ReadLine());
+
+                    Console.Write("\tPassword         : ");
+                    password = Convert.ToString(Console.ReadLine());
+
+                    Console.Write("\tFavorit Animal   : ");
+                    favorite = Convert.ToString(Console.ReadLine());
+
+                    // Membuat object baru tanpa parameter.
+                    User user = new User();
+
+                    // Memanggi Function GenerateId di User class.
+                    id = user.GenerateID(users);
+
+                    // Memanggi Function Convert To Capitalize di User class.
+                    firstname = user.GenerateCapitalize(firstname);
+                    lastname = user.GenerateCapitalize(lastname);
+                    favorite = user.GenerateCapitalize(favorite);
+
+                    // Memanggi Function GenerateUsername di User class.
+                    username = user.GenerateUsername(firstname, lastname, users);
+
+                    // Memanggi Function GeneratePassword di User class.
+                    password = user.GeneratePassword(password);
+
+                    // Memanggi Function UserRole di User class.
+                    role = user.UserRole();
+
+                    users.Add(new User(id, firstname, lastname, username, password, role, favorite));
+
+                    LoadingView();
+                    MessageRegistrationView();
+
+                    // Menampilkan username hasil generate dari Function GenerateUsername.
+                    Console.WriteLine("\t-----------------------------------------\n");
+                    Console.WriteLine($"\tUsername        : {username} ");
+                    Console.WriteLine("");
+                    Console.WriteLine("\t-----------------------------------------\n");
+
+                    Console.Write("\tEnter to insert again or Esc to menu");
+
+                }
+                catch (Exception)
+                {
+                    ExecptionView();
+                }
+                ConsoleKeyInfo KeySelect;
+                while (true)
+                {
+                    KeySelect = Console.ReadKey(true);
+                    if (KeySelect.Key == ConsoleKey.Enter) status = 0;
+
+                    if (KeySelect.Key == ConsoleKey.Escape) status = 1;
+                    GuestView();
+                    break;
+
+                }
+            } while (status == 0);
+        }
+
+        // Function yang menampilkan Forgot Password  dengan user diminta melengkapi data username dan favorite.
+        private static void ForgotPasswordView(List<User> users)
+        {
+            string username, favorite, newPassword;
+            int status = 0;
+
+            do
+            {
+                try
+                {
+                    Console.Clear();
+                    Console.WriteLine("\t------------------------------\n");
+                    Console.WriteLine("\t	Forgot Password        \n");
+                    Console.WriteLine("\t------------------------------\n");
+
+                    Console.Write("\tUsername	: ");
+                    username = Convert.ToString(Console.ReadLine());
+
+                    Console.Write("\tFavorit Animal	: ");
+                    favorite = Convert.ToString(Console.ReadLine());
+
+                    // Membuat object baru dengan tanpa parameter.
+                    User user = new User();
+
+                    // Memanggi Function Convert To Capitalize di User class.
+                    favorite = user.GenerateCapitalize(favorite);
+
+                    LoadingView();
+
+                    // Memanggil function AuthenticationPassword untuk melakukan verifikasi data sudah sesuai atau belum dengan data dilist Users.
+                    if (user.AuthenticationPassword(username, favorite, users))
+                    {
+                        // Data user berhasil diverifikasi.
+                        MessageView(true, "Username available");
+
+                        Console.Write("\tNew Password	: ");
+                        newPassword = Convert.ToString(Console.ReadLine());
+                        newPassword = user.GeneratePassword(newPassword);
+
+                        // Memanggil function ChangePassword untuk melakukan pengaturan password yang baru.
+                        user.ChangePassword(username, newPassword, users);
+                        LoadingView();
+                        MessageView(true, "Password change");
+                    }
+                    else
+                    {
+                        MessageView(false, "Data not match");
+
+                    }
+                    Console.Write("\tEnter to insert again or Esc to menu");
+                }
+                catch (Exception)
+                {
+                    ExecptionView();
+                }
+                ConsoleKeyInfo KeySelect;
+                while (true)
+                {
+                    KeySelect = Console.ReadKey(true);
+                    if (KeySelect.Key == ConsoleKey.Enter) status = 0;
+                    if (KeySelect.Key == ConsoleKey.Escape) status = 1;
+                    GuestView();
+                    break;
+                }
+
+            } while (status == 0);
+        }
+
+        // Helper untuk menampilkan Loading.
+        private static void LoadingView()
+        {
+            Console.WriteLine("");
+            int load = 20;
+            Console.Write("\tLoading.");
+            for (int i = 0; i < load; i++)
+            {
+                Console.Write(".");
+                Thread.Sleep(250);
+            }
+        }
+
+        // Helper untuk menampilkan pesan success atau error.
+        private static void MessageView(bool status, string message)
+        {
+            Console.Clear();
+            Console.WriteLine("\t-----------------------------------------\n");
+
+            if (status)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+            }
+
+            Console.WriteLine($"\t         {message}          \n");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("\t-----------------------------------------\n");
+            Thread.Sleep(1500);
+        }
+
+        // Helper untuk menampilkan pesan sukses registration.
+        private static void MessageRegistrationView()
+        {
+            Console.Clear();
+            Console.WriteLine("\t-----------------------------------------\n");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\t       Successfully registration        \n");
+            Console.ForegroundColor = ConsoleColor.White;
+            Thread.Sleep(1500);
+        }
+
+        // Helper untuk menampilkan execption error.
+        private static void ExecptionView()
+        {
+            Console.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("\tPlease match the requested, ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("Enter to insert again or Esc to menu");
         }
     }
 }
