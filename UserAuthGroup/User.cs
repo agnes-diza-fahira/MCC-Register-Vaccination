@@ -38,6 +38,7 @@ namespace UserAuthGroup
             this.password = password;
         }
 
+
         public User()
         {
 
@@ -60,9 +61,10 @@ namespace UserAuthGroup
             return result;
         }
 
+
         public string GenerateRoleUser()
         {
-            return "user";
+            return "User";
         }
 
         public string GeneratePassword(string password)
@@ -70,85 +72,53 @@ namespace UserAuthGroup
             string result = BCrypt.Net.BCrypt.HashPassword(password);
             return result;
         }
-        
-        public void ResultSearch(List<User> users, string key, int id)
-        {
-            int dataSize = 0;
 
-            for (int i = 0; i < users.Count; i++)
-            {
-                User user = users[i];
-                if (user.id == id)
-                {
-                    dataSize++;
-                    PrintUser(user.id, user.firstname, user.lastname, user.username, user.password);
-                }
-            }
-
-            if (dataSize < 1)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\t           User not found      \n");
-                Console.ForegroundColor = ConsoleColor.White;
-            }
-        }
-
-        public void ResultSearch(List<User> users, string key, string setence)
-        {
-            int dataSize = 0;
-            for (int i = 0; i < users.Count; i++)
-            {
-         
-                User user = users[i];
-                if (key == "firstname" && user.firstname == setence)
-                {
-                    dataSize++;
-                    PrintUser(user.id, user.firstname, user.lastname, user.username, user.password);
-                }
-                if (key == "lastname" && user.lastname == setence)
-                {
-                    dataSize++;
-                    PrintUser(user.id, user.firstname, user.lastname, user.username, user.password);
-                }
-                if (key == "username" && user.username == setence)
-                {
-                    dataSize++;
-                    PrintUser(user.id, user.firstname, user.lastname, user.username, user.password);
-                }
-            }
-
-            if (dataSize < 1)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\t           User not found      \n");
-                Console.ForegroundColor = ConsoleColor.White;
-            }
-        }
-
-        public void PrintUser(int id, string firstname,string lastname,string username,string password)
-        {
-
-                Console.WriteLine("");
-                Console.WriteLine($"\tId            : {id}");
-                Console.WriteLine($"\tFirst Name    : {firstname}");
-                Console.WriteLine($"\tLast Name     : {lastname}");
-                Console.WriteLine($"\tUsername      : {username}");
-                Console.WriteLine("");
-                Console.WriteLine("\t------------------------------\n");
-
-        }
-
-        public bool CheckUser(List<User> users)
+        public void ChangePassword(string username, string password, List<User> users) 
         {
             for (int i = 0; i < users.Count; i++)
             {
                 User user = users[i];
-                if (user.username == username && user.password == password)
+                if (user.username == username)
+                {
+                    user.password = password;
+                }
+            }        
+        }
+    
+        public bool NewPassword(string username,string favorite, List<User> users)
+        {
+            for (int i = 0; i < users.Count; i++)
+            {
+                User user = users[i];
+                if ((user.username == username) && (user.favorite == favorite))
                 {
                     return true;
                 }
             }
             return false;
+        }
+        
+        
+
+      
+        public string CheckUser(List<User> users)
+        {
+            for (int i = 0; i < users.Count; i++)
+            {
+                User user = users[i];
+                if (user.username == username && BCrypt.Net.BCrypt.Verify(password,GeneratePassword(password)))
+                {
+                    if (user.role == "User")
+                    {
+                        return "User";
+                    }
+                    else
+                    {
+                        return "Admin";
+                    }
+                } 
+            }
+            return "not found";
         }
 
 
