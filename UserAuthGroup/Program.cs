@@ -59,10 +59,10 @@ namespace UserAuthGroup
             ConsoleKeyInfo KeySelect;
             KeySelect = Console.ReadKey(true);
 
-            // Enter untuk kembali ke Guest View.
+            // Esc untuk kembali ke Guest View.
             if (KeySelect.Key == ConsoleKey.Escape) status = 0;
 
-            // Esc untuk keluar.
+            // Enter untuk keluar.
             if (KeySelect.Key == ConsoleKey.Enter) status = 1;
             return status;
         }
