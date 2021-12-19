@@ -115,7 +115,7 @@ namespace UserAuthGroup
                     {
                         // User dengan role User.
                         MessageView(true, "Successfully login");
-                        UserView();
+                        UserView(username, users);
                     }
                     else
                     {
@@ -132,7 +132,7 @@ namespace UserAuthGroup
         }
 
         // Function yang menampilkan Two View untuk User dengan pilihan : registration vaccination, about me dan logout.
-        private static void UserView()
+        private static void UserView(string username, List<User> users)
         {
             string select;
             int status = 0;
@@ -153,12 +153,37 @@ namespace UserAuthGroup
                         Console.WriteLine("Registration Vaccination");
                         break;
                     case "2":
-                        Console.WriteLine("About Me");
+                        AboutUserView(username, users);
                         break;
                     case "3":
                         status = Exit(status);
                         break;
                     case "4":
+                        break;
+                    default:
+                        break;
+                }
+            } while (status == 0);
+
+        }
+
+        // Menambahkan function untuk memanggil function GetUser (Program Class)
+        private static void AboutUserView(string username, List<User> users)
+        {
+            int status = 0;
+            do
+            {
+                User user = new User();
+                user.GetUserProfile(username, users);
+                Console.Write("\nBack to home page? (Y/n)");
+                string confirm = Console.ReadLine();
+                switch (confirm.ToLower())
+                {
+                    case "y":
+                        status = Exit(status);
+                        break;
+                    case "":
+                        status = Exit(status);
                         break;
                     default:
                         break;
