@@ -195,51 +195,34 @@ namespace UserAuthGroup
         // Function yang menampilkan Two View untuk Admin dengan pilihan : manage vaccination, manage user,dan logout.
         private static void AdminView(List<User> users)
         {
-            int select;
+            string select;
             int status = 0;
             do
             {
-                try
+                Console.Clear();
+                Console.WriteLine("\t------------------------------\n");
+                Console.WriteLine("\t         Medical House        \n");
+                Console.WriteLine("\t------------------------------\n");
+                Console.WriteLine("\t1. Manage Vaccination\t");
+                Console.WriteLine("\t2. Manage User\t");
+                Console.WriteLine("\t3. Logout\n");
+                Console.Write("\tPlease Input a Number : ");
+                select = Console.ReadLine();
+                switch (select)
                 {
-                    Console.Clear();
-                    Console.WriteLine("\t------------------------------\n");
-                    Console.WriteLine("\t         Medical House        \n");
-                    Console.WriteLine("\t------------------------------\n");
-                    Console.WriteLine("\t1. Manage Vaccination\t");
-                    Console.WriteLine("\t2. Manage User\t");
-                    Console.WriteLine("\t3. Logout\n");
-                    Console.Write("\tPlease Input a Number : ");
-                    select = Convert.ToInt32(Console.ReadLine());
-                    switch (select)
-                    {
-                        case 1:
-                            Console.WriteLine("Manage Vaccination");
-                            break;
-                        case 2:
-                            ManageUserView(users);
-                            break;
-                        case 3:
-                            GuestView();
-                            break;
-                        case 4:
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                catch (Exception)
-                {
-                    ExecptionView();
-                }
-
-                ConsoleKeyInfo KeySelect;
-                while (true)
-                {
-                    KeySelect = Console.ReadKey(true);
-
-                    // Enter untuk kembali ke Admin View.
-                    if (KeySelect.Key == ConsoleKey.Enter) status = 0;
-                    break;
+                    case "1":
+                        Console.WriteLine("Manage Vaccination");
+                        break;
+                    case "2":
+                        ManageUserView(users);
+                        break;
+                    case "3":
+                        status = Exit(status);
+                        break;
+                    case "4":
+                        break;
+                    default:
+                        break;
                 }
             } while (status == 0);
         }
