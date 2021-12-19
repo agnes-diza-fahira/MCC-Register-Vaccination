@@ -41,6 +41,12 @@ namespace UserAuthGroup
 
         }
 
+        public User(string username, string firstname, string lastname)
+        {
+            this.UserName = username;
+            this.FirstName = firstname;
+            this.LastName = lastname;
+        }
 
         // Function untuk verifikasi data dengan melakukan cek data username dan password sama dengan database, jika sama maka akan melihat role dari user yang login.
         public string AuthenticationUser(List<User> users)
@@ -137,6 +143,19 @@ namespace UserAuthGroup
         {
             string result = BCrypt.Net.BCrypt.HashPassword(password);
             return result;
+        }
+
+        public User GetUser(string username, List<User> users)
+        {
+            for (int i = 0; i < users.Count; i++)
+            {
+                User user = users[i];
+                if (user.UserName == username)
+                {
+                    return new User(user.UserName, user.FirstName, user.LastName);
+                }
+            }
+            return new User();
         }
     }
 }
