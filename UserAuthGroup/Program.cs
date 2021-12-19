@@ -54,16 +54,16 @@ namespace UserAuthGroup
 
         private static int Exit(int status)
         {
-            Console.WriteLine("\nPress <Enter> to cancel or <Esc> to exit");
+            Console.WriteLine("\nPress <Enter> to exit or <Esc> to cancel");
 
             ConsoleKeyInfo KeySelect;
             KeySelect = Console.ReadKey(true);
 
             // Enter untuk kembali ke Guest View.
-            if (KeySelect.Key == ConsoleKey.Enter) status = 0;
+            if (KeySelect.Key == ConsoleKey.Escape) status = 0;
 
             // Esc untuk keluar.
-            if (KeySelect.Key == ConsoleKey.Escape) status = 1;
+            if (KeySelect.Key == ConsoleKey.Enter) status = 1;
             return status;
         }
 
