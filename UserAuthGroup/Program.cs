@@ -175,14 +175,17 @@ namespace UserAuthGroup
             {
                 User user = new User();
                 user.GetUserProfile(username, users);
-                Console.Write("\nBack to home page? (Y/n)");
-                string confirm = Console.ReadLine();
-                switch (confirm.ToLower())
+                Console.WriteLine("\n\t------------------------------\n");
+                Console.WriteLine("\tMenu: \n");
+                Console.WriteLine("\t1. Edit profile \n\t2. Back to home page");
+                Console.Write("\n\tSelect menu ~> ");
+                string select = Console.ReadLine();
+                switch (select)
                 {
-                    case "y":
-                        status = Exit(status);
+                    case "1":
+                        EditProfile(users);
                         break;
-                    case "":
+                    case "2":
                         status = Exit(status);
                         break;
                     default:
@@ -190,6 +193,22 @@ namespace UserAuthGroup
                 }
             } while (status == 0);
 
+        }
+
+        private static void EditProfile(List<User> users)
+        {
+            Console.Clear();
+            Console.WriteLine("\t------------------------------\n");
+            Console.WriteLine("\t         Edit Profile         \n");
+            Console.WriteLine("\t------------------------------\n");
+            Console.Write("\tFirst name \t: ");
+            string firstName = Console.ReadLine();
+            Console.Write("\tLast name \t: ");
+            string lasstName = Console.ReadLine();
+            User user = new User();
+            user.EditProfile(firstName, lasstName, users);
+            LoadingView();
+            MessageView(true, "Profile updated");
         }
 
         // Function yang menampilkan Two View untuk Admin dengan pilihan : manage vaccination, manage user,dan logout.
