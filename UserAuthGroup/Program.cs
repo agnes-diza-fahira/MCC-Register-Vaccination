@@ -108,7 +108,7 @@ namespace UserAuthGroup
                     {
                         // User dengan role Admin.
                         MessageView(true, "Successfully login");
-                        AdminView();
+                        AdminView(users);
 
                     }
                     else if (user.AuthenticationUser(users) == user.UserRole())
