@@ -97,6 +97,16 @@ namespace UserAuthGroup
             }
         }
 
+        public void EditProfile(string firstName, string lastName, List<User> users)
+        {
+            for (int i = 0; i < users.Count; i++)
+            {
+                User user = users[i];
+                user.FirstName = firstName;
+                user.LastName = lastName;
+            }
+        }
+
 
         // Helper untuk mengembalikan role Admin.
         public string AdminRole()
@@ -144,6 +154,7 @@ namespace UserAuthGroup
             string result = BCrypt.Net.BCrypt.HashPassword(password);
             return result;
         }
+
 
         public User GetUser(string username, List<User> users)
         {
