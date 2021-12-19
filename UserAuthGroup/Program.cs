@@ -106,7 +106,6 @@ namespace UserAuthGroup
                     // User dengan role Admin.
                     MessageView(true, "Successfully login");
                     AdminView(users);
-
                 }
                 else if (user.AuthenticationUser(users) == user.UserRole())
                 {
@@ -171,7 +170,6 @@ namespace UserAuthGroup
                 {
                     ExecptionView();
                 }
-
                 ConsoleKeyInfo KeySelect;
                 while (true)
                 {
@@ -429,7 +427,7 @@ namespace UserAuthGroup
             } while (status == 0);
         }
 
-        //Function untuk delete user
+        //Function untuk Delete User dipilih berdasarkan id yang diinput
         private static void DeleteUser(List<User> users)
         {
             int status = 0;
