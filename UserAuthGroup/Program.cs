@@ -75,46 +75,57 @@ namespace UserAuthGroup
             int status = 0;
             do
             {
-
+                
                 Console.Clear();
-                Console.WriteLine("\t------------------------------\n");
-                Console.WriteLine("\t         Login User         \n");
-                Console.WriteLine("\t------------------------------\n");
-                Console.WriteLine("\tPlease Input Your Data\n");
-
-                Console.Write("\tUsername   : ");
-                username = Console.ReadLine();
-
-                Console.Write("\tPassword   : ");
-                password = Console.ReadLine();
-
-                // Membuat object baru dengan mengisi parameter dari username dan password.
-                User user = new User(username, password);
-
-                LoadingView();
-
-                // Memanggil function AuthenticationUser untuk melakukan verifikasi data sudah sesuai atau belum dengan data dilist Users.
-                if (user.AuthenticationUser(users) == user.AdminRole())
+                Console.WriteLine("\n\tGo to login page <Enter> | Back to main menu <Esc>");
+                ConsoleKeyInfo KeySelect;
+                KeySelect = Console.ReadKey(true);
+                // kekurangan pakai if kayak gini, user harus berhasil login, kemudian logout untuk kembali ke main menu
+                if (KeySelect.Key == ConsoleKey.Enter)
                 {
-                    // User dengan role Admin.
-                    MessageView(true, "Successfully login");
-                    AdminView();
+                    Console.Clear();
+                    Console.WriteLine("\t------------------------------\n");
+                    Console.WriteLine("\t         Login User         \n");
+                    Console.WriteLine("\t------------------------------\n");
+                    Console.WriteLine("\tPlease Input Your Data\n");
 
-                }
-                else if (user.AuthenticationUser(users) == user.UserRole())
-                {
-                    // User dengan role User.
-                    MessageView(true, "Successfully login");
-                    UserView();
+                    Console.Write("\tUsername   : ");
+                    username = Console.ReadLine();
+
+                    Console.Write("\tPassword   : ");
+                    password = Console.ReadLine();
+
+                    // Membuat object baru dengan mengisi parameter dari username dan password.
+                    User user = new User(username, password);
+
+                    LoadingView();
+
+                    // Memanggil function AuthenticationUser untuk melakukan verifikasi data sudah sesuai atau belum dengan data dilist Users.
+                    if (user.AuthenticationUser(users) == user.AdminRole())
+                    {
+                        // User dengan role Admin.
+                        MessageView(true, "Successfully login");
+                        AdminView();
+
+                    }
+                    else if (user.AuthenticationUser(users) == user.UserRole())
+                    {
+                        // User dengan role User.
+                        MessageView(true, "Successfully login");
+                        UserView();
+                    }
+                    else
+                    {
+                        // Username atau Password salah.
+                        MessageView(false, "Username or Password Wrong");
+                    }
                 }
                 else
                 {
-                    // Username atau Password salah.
-                    MessageView(false, "Username or Password Wrong");
+                    status = 1;
                 }
-
-                //Console.WriteLine("\tEnter to return to the main menu");
             } while (status == 0);
+
         }
 
         // Function yang menampilkan Two View untuk User dengan pilihan : registration vaccination, about me dan logout.
