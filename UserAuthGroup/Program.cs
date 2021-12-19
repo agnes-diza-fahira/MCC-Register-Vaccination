@@ -26,7 +26,9 @@ namespace UserAuthGroup
             string select;
             int status = 0;
 
-            List<User> users = new List<User>() { new User() { Id = 10001, FirstName = "Candra", LastName = "Irawan", UserName = "candra.irawan1", Password = "$2b$10$8tzD9anTWecp9EtPdg2uMu3Q9GU7GvokUIT1JFw2ToW/bJ1NRGEWy", Role = "Admin", Favorite = "Kuda" } };
+            List<User> users = new List<User>();
+            users.Add(new User(10001, "Candra", "Irawan", "candra.irawan1", "$2b$10$8tzD9anTWecp9EtPdg2uMu3Q9GU7GvokUIT1JFw2ToW/bJ1NRGEWy", "Admin", "Kuda"));
+            users.Add(new User(10001, "Agnes", "Fahira", "agnes.fahira2", "$2a$12$KPHdnVHAv7E7XJxnm6l9oeuvURQodetvZWy1ZMuI5eykviCK0WH0G", "Admin", "Kucing"));
 
             do
             {
@@ -100,6 +102,7 @@ namespace UserAuthGroup
 
                     LoadingView();
 
+
                     // Memanggil function AuthenticationUser untuk melakukan verifikasi data sudah sesuai atau belum dengan data dilist Users.
                     if (user.AuthenticationUser(users) == user.AdminRole())
                     {
@@ -165,7 +168,7 @@ namespace UserAuthGroup
         }
 
         // Function yang menampilkan Two View untuk Admin dengan pilihan : manage vaccination, manage user,dan logout.
-        private static void AdminView()
+        private static void AdminView(List<User> users)
         {
             int select;
             int status = 0;
@@ -188,7 +191,7 @@ namespace UserAuthGroup
                             Console.WriteLine("Manage Vaccination");
                             break;
                         case 2:
-                            Console.WriteLine("Manage User");
+                            ManageUserView(users);
                             break;
                         case 3:
                             GuestView();
@@ -213,6 +216,45 @@ namespace UserAuthGroup
                     if (KeySelect.Key == ConsoleKey.Enter) status = 0;
                     break;
                 }
+            } while (status == 0);
+        }
+
+        // Function untuk menampilkan Manage User View
+        private static void ManageUserView(List<User> users)
+        {
+            int status = 0;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("\t------------------------------\n");
+                Console.WriteLine("\t          Manage User         \n");
+                Console.WriteLine("\t------------------------------\n");
+                Console.WriteLine("\t No \t Id \t Name");
+                for (int i = 0; i < users.Count; i++)
+                {
+                    if(users[i].Role == "User")
+                    Console.WriteLine($"\t {i-1}.\t {users[i].Id} \t {users[i].FirstName} {users[i].LastName}");
+                }
+
+                Console.WriteLine("\n \t [D]: Delete User");
+                Console.WriteLine("\n \t Enter to return to Admin View\t");
+                ConsoleKeyInfo KeySelect;
+                while (true)
+                {
+                    KeySelect = Console.ReadKey(true);
+
+                    // Enter untuk kembali ke Admin View.
+                    if (KeySelect.Key == ConsoleKey.Enter)
+                    {
+                        status = 1;
+                    }else if(KeySelect.Key == ConsoleKey.D)
+                    {
+                        DeleteUser(users);
+                    }
+                            
+                    break;
+                }
+
             } while (status == 0);
         }
 
@@ -366,6 +408,25 @@ namespace UserAuthGroup
                     break;
                 }
 
+            } while (status == 0);
+        }
+
+        //Function untuk Delete User dipilih berdasarkan id yang diinput
+        private static void DeleteUser(List<User> users)
+        {
+            int status = 0;
+            do
+            {
+                Console.WriteLine("\n \t Choose Account ID:");
+                int id = int.Parse(Console.ReadLine());
+
+                Console.WriteLine("\n \tAre You Sure to Delete This Account? [Y/N] :");
+
+                if (Console.ReadKey().Key == ConsoleKey.Y)
+                {
+                    users.RemoveAll(user => user.Id == id);
+                }
+                status = 1;
             } while (status == 0);
         }
 
