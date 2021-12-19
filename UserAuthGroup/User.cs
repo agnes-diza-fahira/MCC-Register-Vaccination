@@ -164,10 +164,6 @@ namespace UserAuthGroup
                     Console.WriteLine("\t------------------------------\n");
                     Console.WriteLine($"\tName \t: {user.FirstName} {user.LastName}");
                 }
-                else
-                {
-                    Console.WriteLine("Who am i? ._.");
-                }
             }
 
         }
