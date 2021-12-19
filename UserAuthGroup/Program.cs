@@ -137,7 +137,6 @@ namespace UserAuthGroup
         // Function yang menampilkan Two View untuk User dengan pilihan : registration vaccination, about me dan logout.
 
         private static void UserView(string username, List<User> users, List<UserVaccine> userVaccines)
-
         {
             string select;
             int status = 0;
@@ -158,7 +157,7 @@ namespace UserAuthGroup
                         RegistrationVaccination(username, users, userVaccines);
                         break;
                     case "2":
-                        AboutUserView(username, users);
+                        AboutView(username,users);
                         break;
                     case "3":
                         status = Exit(status);
@@ -172,6 +171,36 @@ namespace UserAuthGroup
 
         }
 
+        private static void AboutView(string username, List<User> users)
+        {
+            int status = 0;
+            do
+            {
+                User user = new User();
+                User userVaccine = user.GetUser(username, users);
+                Console.WriteLine("\t------------------------------\n");
+                Console.WriteLine("\t            About Me          \n");
+                Console.WriteLine("\t------------------------------\n");
+                Console.WriteLine($"\tName \t: {userVaccine.FirstName} {userVaccine.LastName}");
+                Console.WriteLine("\n\t------------------------------\n");
+                Console.WriteLine("\tMenu: \n");
+                Console.WriteLine("\t1. Edit profile \n\t2. Back to home page");
+                Console.Write("\n\tSelect menu ~> ");
+                string select = Console.ReadLine();
+                switch (select)
+                {
+                    case "1":
+                        EditProfile(users);
+                        break;
+                    case "2":
+                        status = Exit(status);
+                        break;
+                    default:
+                        break;
+                }
+            } while (status == 0);
+
+        }
 
         private static void RegistrationVaccination(string username, List<User> users, List<UserVaccine> userVaccines)
         {
@@ -268,10 +297,10 @@ namespace UserAuthGroup
         // Function yang menampilkan Two View untuk Admin dengan pilihan : manage vaccination, manage user,dan logout.
         private static void AdminView(List<User> users, List<UserVaccine> userVaccines)
         {
+            int select;
             int status = 0;
             do
             {
-
                 try
                 {
                     Console.Clear();
@@ -292,7 +321,7 @@ namespace UserAuthGroup
                             ManageUserView(users);
                             break;
                         case 3:
-                            GuestView();
+                            status = Exit(status);
                             break;
                         case 4:
                             break;
@@ -302,17 +331,19 @@ namespace UserAuthGroup
                 }
                 catch (Exception)
                 {
-                    case "1":
-                        EditProfile(users);
-                        break;
-                    case "2":
-                        status = Exit(status);
-                        break;
-                    default:
-                        break;
+                    ExecptionView();
                 }
-            } while (status == 0);
 
+                //ConsoleKeyInfo KeySelect;
+                //while (true)
+                //{
+                //    KeySelect = Console.ReadKey(true);
+
+                //    // Enter untuk kembali ke Admin View.
+                //    if (KeySelect.Key == ConsoleKey.Enter) status = 0;
+                //    break;
+                //}
+            } while (status == 0);
         }
 
         private static void EditProfile(List<User> users)
