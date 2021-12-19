@@ -1,3 +1,8 @@
 
 *.cache
 *.editorconfig
+UserAuthGroup/obj/Debug/netcoreapp3.1/.NETCoreApp,Version=v3.1.AssemblyAttributes.cs
+UserAuthGroup/obj/Debug/netcoreapp3.1/UserAuthGroup.AssemblyInfo.cs
+UserAuthGroup/obj/project.assets.json
+UserAuthGroup/obj/UserAuthGroup.csproj.nuget.g.props
+UserAuthGroup/obj/UserAuthGroup.csproj.nuget.g.targets
