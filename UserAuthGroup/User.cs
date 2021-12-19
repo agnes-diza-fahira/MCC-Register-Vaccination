@@ -138,5 +138,28 @@ namespace UserAuthGroup
             string result = BCrypt.Net.BCrypt.HashPassword(password);
             return result;
         }
+
+        // Menampilkan detail dari user yang login (User Class)
+
+        public void GetUserProfile(string username, List<User> users)
+        {
+            for (int i = 0; i < users.Count; i++)
+            {
+                User user = users[i];
+                if (user.UserName == username)
+                {
+                    Console.Clear();
+                    Console.WriteLine("\t------------------------------\n");
+                    Console.WriteLine("\t            About Me          \n");
+                    Console.WriteLine("\t------------------------------\n");
+                    Console.WriteLine($"\tName \t: {user.FirstName} {user.LastName}");
+                }
+                else
+                {
+                    Console.WriteLine("Who am i? ._.");
+                }
+            }
+
+        }
     }
 }
