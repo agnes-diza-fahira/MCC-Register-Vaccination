@@ -23,53 +23,48 @@ namespace UserAuthGroup
         public static void Main(string[] args)
         {
 
-            int select;
+            string select;
             int status = 0;
 
             List<User> users = new List<User>() { new User() { Id = 10001, FirstName = "Candra", LastName = "Irawan", UserName = "candra.irawan1", Password = "$2b$10$8tzD9anTWecp9EtPdg2uMu3Q9GU7GvokUIT1JFw2ToW/bJ1NRGEWy", Role = "Admin", Favorite = "Kuda" } };
 
             do
             {
-                try
+                GuestView();
+                select = Console.ReadLine();
+                switch (select)
                 {
-
-                    GuestView();
-                    select = Convert.ToInt32(Console.ReadLine());
-                    switch (select)
-                    {
-                        case 1:
-                            LoginView(users);
-                            break;
-                        case 2:
-                            RegistrationView(users);
-                            break;
-                        case 3:
-                            ForgotPasswordView(users);
-                            break;
-                        case 4:
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                catch (Exception)
-                {
-                    // Menampikan informasi error terkait validasi data yang diinputkan oleh user.
-                    ExecptionView();
-                }
-                ConsoleKeyInfo KeySelect;
-                while (true)
-                {
-                    KeySelect = Console.ReadKey(true);
-
-                    // Enter untuk kembali ke Guest View.
-                    if (KeySelect.Key == ConsoleKey.Enter) status = 0;
-
-                    // Esc untuk keluar.
-                    if (KeySelect.Key == ConsoleKey.Escape) status = 1;
-                    break;
+                    case "1":
+                        LoginView(users);
+                        break;
+                    case "2":
+                        RegistrationView(users);
+                        break;
+                    case "3":
+                        ForgotPasswordView(users);
+                        break;
+                    case "4":
+                        status = Exit(status);
+                        break;
+                    default:
+                        break;
                 }
             } while (status == 0);
+        }
+
+        private static int Exit(int status)
+        {
+            Console.WriteLine("\nPress <Enter> to cancel or <Esc> to exit");
+
+            ConsoleKeyInfo KeySelect;
+            KeySelect = Console.ReadKey(true);
+
+            // Enter untuk kembali ke Guest View.
+            if (KeySelect.Key == ConsoleKey.Enter) status = 0;
+
+            // Esc untuk keluar.
+            if (KeySelect.Key == ConsoleKey.Escape) status = 1;
+            return status;
         }
 
         // Function yang menampilkan Login View dengan user diminta mengisi username dan password
