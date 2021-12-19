@@ -54,7 +54,7 @@ namespace UserAuthGroup
 
         private static int Exit(int status)
         {
-            Console.WriteLine("\nPress <Enter> to exit or <Esc> to cancel");
+            Console.WriteLine("\nAre you sure ? Press <Enter> to confirm or <Esc> to cancel");
 
             ConsoleKeyInfo KeySelect;
             KeySelect = Console.ReadKey(true);
@@ -113,66 +113,41 @@ namespace UserAuthGroup
                     MessageView(false, "Username or Password Wrong");
                 }
 
-                Console.WriteLine("\tEnter to return to the main menu");
-
-                ConsoleKeyInfo keyInfo;
-                while (true)
-                {
-                    keyInfo = Console.ReadKey(true);
-                    if (keyInfo.Key == ConsoleKey.Enter) status = 1;
-                    break;
-                }
+                //Console.WriteLine("\tEnter to return to the main menu");
             } while (status == 0);
         }
 
         // Function yang menampilkan Two View untuk User dengan pilihan : registration vaccination, about me dan logout.
         private static void UserView()
         {
-            int select;
+            string select;
             int status = 0;
             do
             {
-                try
+                Console.Clear();
+                Console.WriteLine("\t------------------------------\n");
+                Console.WriteLine("\t         Medical House        \n");
+                Console.WriteLine("\t------------------------------\n");
+                Console.WriteLine("\t1. Registration Vaccination\t");
+                Console.WriteLine("\t2. About Me\t");
+                Console.WriteLine("\t3. Logout\n");
+                Console.Write("\tPlease Input a Number : ");
+                select = Console.ReadLine();
+                switch (select)
                 {
-                    Console.Clear();
-                    Console.WriteLine("\t------------------------------\n");
-                    Console.WriteLine("\t         Medical House        \n");
-                    Console.WriteLine("\t------------------------------\n");
-                    Console.WriteLine("\t1. Registration Vaccination\t");
-                    Console.WriteLine("\t2. About Me\t");
-                    Console.WriteLine("\t3. Logout\n");
-                    Console.Write("\tPlease Input a Number : ");
-                    select = Convert.ToInt32(Console.ReadLine());
-                    switch (select)
-                    {
-                        case 1:
-                            Console.WriteLine("Registration Vaccination");
-                            break;
-                        case 2:
-                            Console.WriteLine("About Me");
-                            break;
-                        case 3:
-                            GuestView();
-                            break;
-                        case 4:
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                catch (Exception)
-                {
-                    ExecptionView();
-                }
-
-                ConsoleKeyInfo KeySelect;
-                while (true)
-                {
-                    KeySelect = Console.ReadKey(true);
-
-                    // Enter untuk kembali ke User View.
-                    if (KeySelect.Key == ConsoleKey.Enter) status = 0;
-                    break;
+                    case "1":
+                        Console.WriteLine("Registration Vaccination");
+                        break;
+                    case "2":
+                        Console.WriteLine("About Me");
+                        break;
+                    case "3":
+                        status = Exit(status);
+                        break;
+                    case "4":
+                        break;
+                    default:
+                        break;
                 }
             } while (status == 0);
 
